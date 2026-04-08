@@ -1,0 +1,132 @@
+# To use:
+#
+#     pre-commit run -a
+#
+# Or:
+#
+#     pre-commit install  # (runs every time you commit in git)
+#
+# To update this file:
+#
+#     pre-commit autoupdate
+#
+# See https://github.com/pre-commit/pre-commit
+
+repos:
+  # Standard hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: check-added-large-files
+      - id: check-ast
+      - id: check-case-conflict
+      # - id: check-docstring-first
+      - id: check-merge-conflict
+      - id: check-symlinks
+      - id: check-xml
+      - id: check-yaml
+      - id: debug-statements
+      - id: mixed-line-ending
+      - id: trailing-whitespace
+        exclude: \.(h\+\+|h|hh|hxx|hpp|cuh|c|cc|cpp|cu|c\+\+|cxx|tpp|txx)$|boost/.*|^packages/engine_control_storm_atlas/emulator/
+      - id: fix-byte-order-marker
+
+  # Python hooks
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.3.1
+    hooks:
+      - id: pyupgrade
+        args: [--py38-plus, --keep-runtime-typing]
+        exclude: ^packages/engine_control_storm_atlas/emulator/
+
+  - repo: https://github.com/pycqa/isort
+    rev: 5.12.0
+    hooks:
+      - id: isort
+        name: isort (python)
+        args: ["--profile", "black", "--filter-files"]
+        exclude: ^packages/engine_control_storm_atlas/emulator/
+
+  - repo: https://github.com/psf/black
+    rev: 22.12.0
+    hooks:
+      - id: black
+        args: ["--line-length=99"]
+        exclude: ^packages/engine_control_storm_atlas/emulator/
+
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.1.0
+    hooks:
+      - id: flake8
+        args:
+          ["--ignore=E203, E266, E501, W503, F403, F401 --max-line-length = 99"]
+        exclude: ^packages/engine_control_storm_atlas/emulator/
+
+  # CPP hooks
+  - repo: https://github.com/pre-commit/mirrors-clang-format
+    rev: v15.0.4
+    hooks:
+      - id: clang-format
+        name: clang-format
+        description: Format files with ClangFormat.
+        entry: clang-format
+        language: system
+        files: \.(c|cc|cxx|cpp|frag|glsl|h|hpp|hxx|ih|ispc|ipp)$|boost/.*
+        args: ["--style=file", "-i"]
+
+  # Maybe use https://github.com/cpplint/cpplint instead
+  - repo: local
+    hooks:
+      - id: cpplint
+        name: cpplint
+        description: Static code analysis of C/C++ files.
+        stages: [pre-commit]
+        entry: cpplint
+        language: python
+        additional_dependencies: ['cpplint']
+        files: \.(c|cc|cxx|cpp|frag|glsl|h|hpp|hxx|ih|ispc|ipp)$
+        args:
+          [
+            "--linelength=150",
+            "--filter=-whitespace/newline,-build/header_guard,-runtime/references,-build/c++11,-whitespace/parens,-whitespace/braces,-whitespace/indent,-build/include_subdir",
+          ]
+        exclude: boost/.*
+
+  - repo: local
+    hooks:
+    - id: cmake-format
+      name: cmake-format
+      language: python
+      additional_dependencies: ['cmake-format']
+      entry: cmake-format
+      args: ["--in-place", "--line-width", "100", "--max-prefix-chars", "10","--max-subgroups-hwrap","1", "--tab-size","2", "--max-rows-cmdline","1","--always-wrap","[set_target_properties]"]
+      files: CMakeLists\.txt$
+
+  # Cmake hooks
+  - repo: local
+    hooks:
+      - id: cmakelint
+        name: cmakelint
+        stages: [pre-commit]
+        entry: cmakelint
+        language: python
+        additional_dependencies: ["cmakelint"]
+        files: CMakeLists\.txt$
+        args: ["--linelength","100"]
+
+  # Spellcheck in comments and docs
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.2.2
+    hooks:
+      - id: codespell
+        name: codespell
+        description: Checks for common misspellings in text files.
+        entry: codespell
+        language: python
+        types: [text]
+        args: ["--ignore-words=.codespell-ignore-words.txt"]
+        exclude: \.(svg|pyc|lock|json)$|^packages/engine_control_storm_atlas/emulator/
+  - repo: https://github.com/Greenroom-Robotics/generate_parameter_library_pre_commit
+    rev: v1.0.0
+    hooks:
+      - id: validate-parameter-schema
