@@ -20,5 +20,12 @@ for pkg_name, pkg_prefix in interfaces_pkgs.items():
         package_name=pkg_name,
         interface_files=idls,
         output_path=Path('/'),
-        types=['mypy', 'pydantic']
+        types=['mypy'] # We can only generate one type at a time due to type prefix
+    )
+
+    generate(
+        package_name=pkg_name,
+        interface_files=idls,
+        output_path=Path('/'),
+        types=['pydantic']
     )
