@@ -20,5 +20,5 @@ for pkg_name, pkg_prefix in interfaces_pkgs.items():
         package_name=pkg_name,
         interface_files=idls,
         output_path=Path('/'),
-        types=['mypy']
+        types=['mypy', 'pydantic']
     )
