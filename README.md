@@ -4,10 +4,10 @@
 
 This builds a base ROS 2 docker image used for building Greenroom packages.
 
-## Features 
+## Features
 * Greenroom's `bloom` [fork](https://github.com/Greenroom-Robotics/bloom/)
 * Greenroom's `rosdep` [fork](https://github.com/Greenroom-Robotics/rosdep/)
-* All base interfaces generated with `rosidl_generator_mypy`
+* All base interfaces generated with `rosidl_generator_mypy` and `rosidl_generator_pydantic`
 
 ## Versions
 
