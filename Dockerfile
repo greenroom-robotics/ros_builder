@@ -124,7 +124,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     # Install Greenroom fork of bloom
     && pip install pre-commit lark-parser \
         https://github.com/Greenroom-Robotics/bloom/archive/refs/heads/gr.zip \
-        https://github.com/Greenroom-Robotics/rosdep/archive/refs/heads/russwebber/sc-16383/upgrade-to-ros-2-kilted.zip \
+        https://github.com/Greenroom-Robotics/rosdep/archive/refs/heads/greenroom.zip \
     # Move default home dir and update base user to ros.
     && usermod --move-home --home /home/ros --login ros ${BASE_USER} \
     && usermod -a -G audio,video,sudo,plugdev,dialout ros \
