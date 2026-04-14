@@ -14,6 +14,9 @@ ENV ROS_DISTRO="${ROS_DISTRO}"
 ENV ROS_PYTHON_VERSION=3
 ENV RMW_IMPLEMENTATION=rmw_fastrtps_cpp
 
+# Remove Intel RealSense apt repo from DeepStream 7.1 base image (expired GPG key, not needed)
+RUN rm -f /etc/apt/sources.list.d/archive_uri-https_librealsense_intel_com_debian_apt-repo-*.list
+
 # setup timezone, debconf, upgrade packages and install basic tools
 RUN echo 'Etc/UTC' > /etc/timezone && \
     ln -sf /usr/share/zoneinfo/Etc/UTC /etc/localtime && \
