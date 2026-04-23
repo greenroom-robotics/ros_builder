@@ -131,6 +131,15 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     && passwd -d ros \
     && groupmod --new-name ros ${BASE_USER}
 
+# For iron reinstall FFmpeg codec libs as they are missing
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+  if [ "$ROS_DISTRO" = "iron" ]; then \
+    sudo apt-get update && \
+    sudo apt-get install --reinstall -y libmp3lame0 libxvidcore4 && \
+    sudo ldconfig; \
+  fi
+
+
 WORKDIR /home/ros
 ENV PATH="/home/ros/.local/bin:${PATH}"
 ENV ROS_OVERLAY=/opt/ros/${ROS_DISTRO}
