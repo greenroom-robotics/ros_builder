@@ -164,8 +164,8 @@ RUN pip install poetry poetry-plugin-export
 
 # poetry pulls anyio 4.x in transitively (httpx -> httpcore -> anyio). anyio's
 # pytest plugin imports `_pytest.scope`, added in pytest >= 7. On iron (Jammy)
-# apt only ships python3-pytest 6.2.5, so `python3 -m pytest --version` fails
-# plugin loading and `ament_has_pytest` reports pytest as missing for every
-# ament_cmake_pytest consumer. Shadow the apt pytest with a user-pip install.
-# Kilted/Noble already ship pytest 7+ via apt, so the shim is iron-only.
-RUN if [ "$ROS_DISTRO" = "iron" ]; then pip install "pytest>=7"; fi
+# apt ships python3-pytest 6.2.5, so `python3 -m pytest --version` fails plugin
+# loading and `ament_has_pytest` reports pytest as missing. Pin <8 because
+# pytest 8+ removed `_pytestfixturefunction`, which iron's launch_pytest still
+# accesses (launch_pytest/plugin.py:239); 7.4.4 matches kilted's apt pytest.
+RUN if [ "$ROS_DISTRO" = "iron" ]; then pip install "pytest>=7,<8"; fi
