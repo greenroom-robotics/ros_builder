@@ -146,7 +146,7 @@ RUN --mount=type=bind,source=scripts,target=scripts \
         ros-${ROS_DISTRO}-rosidl-generator-mypy \
         ros-${ROS_DISTRO}-rosidl-generator-pydantic && \
     rm -rf /var/lib/apt/lists/* && \
-    pip install --break-system-packages --ignore-installed "pydantic>=2.0" && \
+    pip install --ignore-installed "pydantic>=2.0" && \
     source ${ROS_OVERLAY}/setup.sh && python3 scripts/rosidl_generate_inplace.py && \
     # Enable caching of apt packages: https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/reference.md#example-cache-apt-packages \
     rm -f /etc/apt/apt.conf.d/docker-clean && \
